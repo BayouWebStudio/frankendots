@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reviews &#x2014; Theodore Casados</title>
-  <meta name="description" content="Reviews and testimonials from Theodore Casados' clients in Lakewood, Colorado.">
-  <link rel="canonical" href="https://frankendots.com/testimonials.html">
-  <meta property="og:title" content="Reviews &#x2014; Theodore Casados">
-  <meta property="og:image" content="https://raw.githubusercontent.com/BayouWebStudio/frankendots/main/img/1.jpg">
-  <meta property="og:url" content="https://frankendots.com/testimonials.html">
+  <title>Reviews &#x2014; Frank Vortex</title>
+  <meta name="description" content="Client reviews and testimonials for Frank Vortex in Phoenix, Arizona.">
+  <link rel="canonical" href="https://eternowebstudio.com/frankendots/testimonials.html">
+  <meta property="og:title" content="Reviews &#x2014; Frank Vortex">
+  <meta property="og:image" content="https://eternowebstudio.com/frankendots/img/1.jpg">
+  <meta property="og:url" content="https://eternowebstudio.com/frankendots/testimonials.html">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -168,13 +168,12 @@
 <body>
   
   <nav>
-    <a href="./index.html" class="nav-logo">Theodore Casados</a>
+    <a href="./index.html" class="nav-logo">Frank Vortex</a>
     <ul class="nav-links">
       <li><a href="./index.html" 
-        data-en="Home" data-es="Inicio">Home</a></li>
+        data-en="Home" data-es="Home">Home</a></li>
       <li><a href="./about.html" 
         data-en="About" data-es="Sobre M&#xed;">About</a></li>
-      <li><a href="./art.html">Art</a></li>
       <li><a href="./tattoos.html" 
         data-en="Tattoos" data-es="Tatuajes">Tattoos</a></li>
       <li><a href="./booking.html" 
@@ -190,12 +189,11 @@
   <div class="mobile-menu">
     <a href="./index.html" data-en="Home" data-es="Inicio">Home</a>
     <a href="./about.html" data-en="About" data-es="Sobre M&#xed;">About</a>
-    <a href="./art.html">Art</a></li>
-      <li><a href="./tattoos.html" data-en="Tattoos" data-es="Tatuajes">Tattoos</a>
+    <a href="./tattoos.html" data-en="Tattoos" data-es="Tatuajes">Tattoos</a>
     <a href="./booking.html" data-en="Booking" data-es="Reservaciones">Booking</a>
     <a href="./testimonials.html" data-en="Reviews" data-es="Testimonios">Reviews</a>
   </div>
-  <a href="./booking.html" class="book-float">Book</a>
+  <a href="./booking.html" class="book-float" data-en="Book" data-es="Reservar">Book</a>
 
   <section class="page-hero">
     <p class="page-eyebrow fade-up" data-en="Client Reviews" data-es="Opiniones de Clientes">Client Reviews</p>
@@ -210,7 +208,7 @@
 
     <div class="share-section fade-up">
       <h2 data-en="Share Your Experience" data-es="Comparte tu Experiencia">Share Your Experience</h2>
-      <p data-en="Got tattooed by Theodore Casados? We'd love to hear your story." data-es="&#xbf;Te tatu&#xf3; Theodore Casados? Nos encantar&#xed;a escuchar tu historia.">Got tattooed by Theodore Casados? We'd love to hear your story.</p>
+      <p data-en="Got tattooed by Frank Vortex? We'd love to hear your story." data-es="&#xbf;Te tatu&#xf3; Frank Vortex? Nos encantar&#xed;a escuchar tu historia.">Got tattooed by Frank Vortex? We'd love to hear your story.</p>
       <form onsubmit="submitTestimonial(event)">
         <div class="form-group">
           <label data-en="Your Name" data-es="Tu Nombre">Your Name</label>
@@ -221,26 +219,31 @@
           <textarea id="t-body" rows="5" required placeholder="Tell us about your experience..."></textarea>
         </div>
         <div class="form-group">
-          <label>Instagram (opcional)</label>
+          <label>Instagram (optional)</label>
           <input type="text" id="t-ig" placeholder="@handle">
         </div>
         <button type="submit" class="btn-submit" data-en="Submit" data-es="Enviar">Submit</button>
         <p id="t-success" style="display:none;color:var(--gold);margin-top:16px;" data-en="Thank you! Your testimonial has been sent." data-es="&#xa1;Gracias! Tu testimonio ha sido enviado.">Thank you! Your testimonial has been sent.</p>
       </form>
       <script>
-      function submitTestimonial(e) {
+      async function submitTestimonial(e) {
         e.preventDefault();
-        const name = document.getElementById('t-name').value;
-        const body = document.getElementById('t-body').value;
-        const ig = document.getElementById('t-ig').value;
-        const to = "hello@frankendots.com";
-        const sub = encodeURIComponent("New testimonial - " + name);
-        const msg = encodeURIComponent("Name: " + name + "
-Instagram: " + ig + "
-
-" + body);
-        window.location.href = "mailto:" + to + "?subject=" + sub + "&body=" + msg;
-        document.getElementById('t-success').style.display = 'block';
+        const name = document.getElementById('t-name')?.value || '';
+        const reviewText = document.getElementById('t-body')?.value || '';
+        const rating = 5;
+        if (!name || !reviewText) { alert('Please fill in all fields'); return; }
+        try {
+          const res = await fetch('https://curious-lemming-262.convex.site/api/testimonials/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: 'frankendots', name, reviewText, rating })
+          });
+          if (res.ok) {
+            document.getElementById('review-form') ? document.getElementById('review-form').innerHTML = '<p style="color:#00c882;text-align:center;padding:20px;">Thank you for your review!</p>' : document.getElementById('t-success').style.display = 'block';
+          } else {
+            alert('Failed to submit. Please try again.');
+          }
+        } catch { alert('Failed to submit. Please try again.'); }
       }
       </script>
     </div>
@@ -248,30 +251,42 @@ Instagram: " + ig + "
 
   
   <footer>
-    <div class="footer-logo">Theodore Casados</div>
+    <div class="footer-logo">Frank Vortex</div>
     <div class="footer-links">
       <a href="./index.html">Home</a>
       <a href="./about.html">About</a>
-      <a href="./art.html">Art</a></li>
-      <li><a href="./tattoos.html">Tattoos</a>
+      <a href="./tattoos.html">Tattoos</a>
       <a href="./booking.html">Booking</a>
+      <a href="./testimonials.html">Testimonials</a>
       <a href="https://www.instagram.com/frankendots" target="_blank" rel="noopener">Instagram</a>
       
     </div>
-    <div class="footer-copy">&#xa9; 2026 Theodore Casados</div>
+    <div class="footer-copy">&#xa9; 2026 Frank Vortex</div>
   </footer>
   
   <script>
-    const LANG = { default: 'en', current: 'en' };
+    const LANG = { default: 'en', current: document.documentElement.lang || 'en' };
     function toggleLang() {
       LANG.current = LANG.current === 'es' ? 'en' : 'es';
+      document.documentElement.lang = LANG.current;
       document.querySelectorAll('[data-es][data-en]').forEach(el => {
         el.textContent = el.getAttribute('data-' + LANG.current) || el.textContent;
       });
       document.querySelectorAll('[data-es-href][data-en-href]').forEach(el => {
         el.setAttribute('href', el.getAttribute('data-' + LANG.current + '-href') || el.getAttribute('href'));
       });
+      const btn = document.querySelector('.lang-toggle');
+      if (btn) btn.textContent = LANG.current === 'es' ? 'EN' : 'ES';
     }
+    // Apply language on page load based on html lang attribute
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('[data-es][data-en]').forEach(el => {
+        el.textContent = el.getAttribute('data-' + LANG.current) || el.textContent;
+      });
+      const btn = document.querySelector('.lang-toggle');
+      if (btn) btn.textContent = LANG.current === 'es' ? 'EN' : 'ES';
+    });
+
     // Fade-up on scroll
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
